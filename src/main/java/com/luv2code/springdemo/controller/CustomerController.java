@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.luv2code.springdemo.entity.Customer;
 import com.luv2code.springdemo.service.CustomerService;
+import com.luv2code.springdemo.util.SortUtils;
 
 @Controller
 @RequestMapping("/customer")
@@ -23,9 +24,14 @@ public class CustomerController {
 	private CustomerService customerService;
 	
 	@GetMapping("/list")
-	public String listCustomers(Model theModel) {
+	public String listCustomers(Model theModel, @RequestParam(required = false) String sort) {
 		
-		List<Customer> customers = customerService.getCustomers();
+		List<Customer> customers = null;
+		if (sort != null) {
+			customers = customerService.getCustomers(Integer.parseInt(sort));
+		} else {
+			customers = customerService.getCustomers(SortUtils.LAST_NAME);
+		}
 		
 		theModel.addAttribute("customers", customers);
 		
