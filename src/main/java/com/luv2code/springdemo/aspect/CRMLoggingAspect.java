@@ -2,7 +2,9 @@ package com.luv2code.springdemo.aspect;
 
 import java.util.logging.Logger;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
@@ -12,17 +14,24 @@ public class CRMLoggingAspect {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
 	
-	@Pointcut("execute(* com.luv2code.springdemo.controller.*.*(..))")
+	@Pointcut("execution(* com.luv2code.springdemo.controller.*.*(..))")
 	private void forControllerPackage() {}
 	
-	@Pointcut("execute(* com.luv2code.springdemo.service.*.*(..))")
+	@Pointcut("execution(* com.luv2code.springdemo.service.*.*(..))")
 	private void forServicePackage() {}
 	
-	@Pointcut("execute(* com.luv2code.springdemo.dao.*.*(..))")
+	@Pointcut("execution(* com.luv2code.springdemo.dao.*.*(..))")
 	private void forDaoPackage() {}
 	
 	@Pointcut("forControllerPackage() || forServicePackage() || forDaoPackage()")
 	private void forAppFlow() {}
 	
-	
+	@Before("forAppFlow()")
+	private void before(JoinPoint joinPoint) {
+		
+		System.out.println("====>>> In @Before: calling method: "
+				+ joinPoint.getSignature().toShortString());
+		
+		// System.out.println(joinPoint.getArgs());
+	}
 }
