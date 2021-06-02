@@ -3,6 +3,7 @@ package com.luv2code.springdemo.aspect;
 import java.util.logging.Logger;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -38,5 +39,15 @@ public class CRMLoggingAspect {
 			logger.info("====>>> argument: " + arg);
 		}
 	}
+	
+	@AfterReturning(
+			pointcut = "forAppFlow()",
+			returning = "result")
+	private void afterReturning(JoinPoint joinPoint, Object result) {
+		
+		logger.info("====>>> In @AfterReturning: from method: " + joinPoint.getSignature());
+		logger.info("====>>> Result: " + result);
+		
+		
 	}
 }
